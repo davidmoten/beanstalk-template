@@ -119,12 +119,27 @@ Preparation
 4. Configuration Details - Instance type - t2.nano
 5. Create
 6. go to command line to the beanstalk-template application directory
-7. 
-    export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
-    export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
-8. Update details in `update-certificates.sh`
+7. Update details in `update-certificates.sh` (certificate details, endpoint domain name)
 8. Run `./update-certificates.sh`
 9. Copy `target/keys.tar.gz` somewhere safe
+10. Open `keys.tar.gz` and copy the contents of `server-private-key.pem` to the clipboard
+11. Run `mvn -ep "<PASTE HERE>"`
+12. Copy the output and add to your `~/.m2/settings.xml`:
+
+```xml
+<server>
+    <server>
+        <id>your-app-name-server-private-key-dev</id>
+        <password>PASTE_OUTPUT_HERE</password>
+    </server>
+</servers>
+```
+13. Update the pom.xml so is consuming your serverId from above
+14. Test that decrypt works:
+    ```mvn clean install```
+15. 
+    export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
+    export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY> 
 
 
  
