@@ -8,7 +8,7 @@ set -e
 
 cd target
 
-export SITE=beanstalktemplate-${MODE}.ap-southeast-2.elasticbeanstalk.com
+export SITE=beanstalk-template-${MODE}.ap-southeast-2.elasticbeanstalk.com
 export CA_SUBJECT="/C=AU/ST=Your state/L=Your location/O=Your organisation/OU=Your org unit/emailAddress=youremail@gmail.com/CN=your.org.website.com"
 export SERVER_SUBJECT="/C=AU/ST=Your state/L=Your location/O=Your organisation/OU=Your org unit/emailAddress=youremail@gmail.com/CN=$SITE"
 export CLIENT_SUBJECT="/C=AU/ST=Client state/L=Client location/O=Client org/OU=Client org unit/CN=client.website.com"

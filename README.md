@@ -122,6 +122,7 @@ Preparation
 7. 
     export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
     export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
+8. Update details in `update-certificates.sh`
 8. Run `./update-certificates.sh`
 9. Copy `target/keys.tar.gz` somewhere safe
 
