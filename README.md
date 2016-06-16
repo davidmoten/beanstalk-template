@@ -135,6 +135,7 @@ Preparation
 </servers>
 ```
 13. Update the pom.xml so is consuming your serverId from above
+14. Update the pom.xml with proxy.host, proxy.port info (leave blank if don't apply)
 14. Test that decrypt works:
     ```mvn clean install```
 15. 

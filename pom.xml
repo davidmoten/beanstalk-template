@@ -15,6 +15,7 @@
         <mode>dev</mode>
         <aws.sdk.version>1.11.8</aws.sdk.version>
         <proxy.host>proxy.amsa.gov.au</proxy.host>
+        <proxy.port>8080</proxy.port>
 
         <beanstalk.applicationName>beanstalkDemo</beanstalk.applicationName>
         <beanstalk.cnamePrefix>beanstalkDemo</beanstalk.cnamePrefix>
@@ -154,7 +155,7 @@
                     <environmentName>beanstalk-template-${mode}</environmentName>
                     <region>ap-southeast-2</region>
                     <httpsProxyHost>${proxy.host}</httpsProxyHost>
-                    <httpsProxyPort>8080</httpsProxyPort>
+                    <httpsProxyPort>${proxy.port}</httpsProxyPort>
                 </configuration>
             </plugin>
             <plugin>
