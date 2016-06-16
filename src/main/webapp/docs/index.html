@@ -1,0 +1,128 @@
+<html>
+<head>
+<meta content="Australian Maritime Safety Authority" name="creator"/>
+<title>Cobham-AMSA</title>
+<style>
+* {
+    font-family:'Source Sans Pro',Arial,Helvetica,sans-serif;
+}
+.container {
+    margin: 20px 20px 0 0;
+    padding: 10px;  
+    overflow: auto;
+    background: #3D6384;
+}
+.logo {
+    float: left;
+}
+.logo img {
+    display: block;
+    
+}
+.content {
+    margin-left: 150px;
+    color: white;
+}
+.xml-container {
+    float:left;width:90%;height:4em;
+}
+
+code {
+    font-family:"Courier New", Courier, monospace;
+    font-style: italic;
+}
+textarea {
+    resize: none;
+}
+body {
+    margin-left: 20px;
+}
+
+.xml-textarea {
+    width:100%;height:100%;
+}
+
+.method:before
+{
+    content:' ';
+    display:block;
+    border:1px solid lightblue;
+    margin-bottom: 1em;
+}
+</style>
+</head>
+<body>
+<div class="container">                
+    <div class="logo"><img src="../images/amsa-logo.png" /></div>
+    <div class="content">
+        <h3 class="content">Cobham Web Service Endpoint</h3>
+    </div>
+</div>
+<p>Version: ${project.version}</p>
+
+<p>Endpoint to</p> 
+<ul>
+  <li>submit messages from tasked Search and Rescue aircraft (Aircraft Reports)</li>
+  <li>submit messages about Search and Rescue aircraft in general (Status Reports including crewing, maintenance issues, availability, assigned base and more)</li>
+  <li>receive briefs</li>
+</ul>
+
+<p>Status:</p>
+<ul>
+<li><a href="../info">application info</a></li>
+</ul>
+
+<h2>API</h2>
+
+<h3 class="method">Submit aircraft report</h3>
+<p>HTTP Post with an <code>xml</code> parameter compliant with agreed schema to the <a href="../service/submitAircraftReport">/service/submitAircraftReport</a> url:</p>
+<form action="../service/submitAircraftReport" method="post">
+  xml:<br/>
+  <div>
+    <div class="xml-container">
+      <textarea class="xml-textarea" name="xml"></textarea>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+  <br/>
+  <input type="submit" value="Submit">
+</form>
+<p>Note: the xml message must also start with an XML prolog <code>&lt;?xml ... ?&gt;</code></p>
+<p>The method returns an identifier up to 32 characters long (a UUID) (with <code>Content-Type=text/plain</code>) that can be used to trace the submitted report through AMSA systems (and should be logged by Cobham's system for the same reason).</p>
+
+<h3 class="method">Submit status report</h3>
+<p>HTTP Post with an <code>xml</code> parameter compliant with agreed schema to the <a href="../service/submitStatusReport">/service/submitStatusReport</a> url:</p>
+<form action="../service/submitStatusReport" method="post">
+  xml:<br/>
+  <div>
+    <div class="xml-container">
+      <textarea class="xml-textarea" name="xml"></textarea>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+  <br/>
+  <input type="submit" value="Submit">
+</form>
+
+<p>Note: the xml message must also start with an XML prolog <code>&lt;?xml ... ?&gt;</code></p>
+<p>The method returns an identifier up to 32 characters long (a UUID) (with <code>Content-Type=text/plain</code>) that can be used to trace the submitted report through AMSA systems (and should be logged by Cobham's system for the same reason).</p>
+
+<h3 class="method">Get briefs</h3>
+<p>HTTP Get returning xml compliant with the agreed schema from the <a href="../service/getBriefs">/service/getBriefs</a> url.</p>
+
+<ul>
+<li>Returns a sequence of briefs in one xml string (as per <i>briefs</i> type in the schema).</li>
+<li>If a brief is returned in a call to this method then it may not be returned in subsequent calls to the method up to a certain visibility timeout (~30s).</li>
+<li>Beyond the visibility timeout if a corresponding brief acknowledgement has not been fully processsed by AMSA then the brief will be returned in the next call to this method.</li>
+<li>A maximum of 10 briefs will be returned in a single call to <b>getBriefs</b>.</li>
+<li>Once the brief has been acknowledged (via a call to the submit method with parameter being the brief acknowledgement message) then the brief may continue to be returned by calls to the <b>getBriefs</b> method (keeping in mind the visibility timeout). At some point in time (after the brief acknowledgement has been fully processsed) the brief in question would no longer be reported by the <b>getBriefs</b> method.</li>
+<li>The expected usage for this method would be that the client repeatedly calls <b>getBriefs</b> and processes briefs until <b>getBriefs</b> returns no briefs. The client then waits for an interval of say 30 seconds before performing this again.</li>
+<li>1 minute is an acceptable latency for brief delivery (so a polling interval of 30s for calls to <b>getBriefs</b> may be appropriate).</li>
+</ul>
+
+<h3 class="method">Application info</h3>
+<p>HTTP Get returning JSON from <a href="info">/info</a> url. This is a convenience method for development and
+testing purposes and not part of the required production API.</p>
+
+</body>
+</html>
