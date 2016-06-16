@@ -110,6 +110,24 @@ mvn jetty:run
 ```
 This will communicate with *dev* AWS resources (unless you modify the pom otherwise).
 
+Preparation
+------------------
+
+1. Create a new beanstalk application using the AWS web console
+2. Environment Type - Predefined Configuration - Java
+3. Environment name - your-app-name-dev
+4. Configuration Details - Instance type - t2.nano
+5. Create
+6. go to command line to the beanstalk-template application directory
+7. 
+    export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
+    export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
+8. Run `./update-certificates.sh`
+9. Copy `target/keys.tar.gz` somewhere safe
+
+
+ 
+
 Building and deploying
 -----------------------
 
