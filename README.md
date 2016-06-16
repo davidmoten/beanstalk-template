@@ -138,11 +138,14 @@ Preparation
 14. Test that decrypt works:
     ```mvn clean install```
 15. 
-    export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
-    export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY> 
-
-
- 
+```
+export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
+export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
+``` 
+ 16. Deploy app to beanstalk:
+ ```
+ mvn package aws:deploy -Dmode=dev
+ ```
 
 Building and deploying
 -----------------------
