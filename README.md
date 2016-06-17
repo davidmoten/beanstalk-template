@@ -113,19 +113,18 @@ This will communicate with *dev* AWS resources (unless you modify the pom otherw
 Preparation
 ------------------
 
-1. Create a new beanstalk application using the AWS web console
-2. Environment Type - Predefined Configuration - Tomcat (don't choose Java!)
-3. Environment name - your-app-name-dev
-4. Configuration Details - Instance type - t2.nano
-5. Create
-6. go to command line to the beanstalk-template application directory
-7. Update details in `update-certificates.sh` (certificate details, endpoint domain name)
-8. Run `./update-certificates.sh`
-9. Copy `target/keys.tar.gz` somewhere safe
-10. Open `keys.tar.gz` and copy the contents of `server-private-key.pem` to the clipboard
-11. Run `mvn -ep "<PASTE HERE>"`
-12. Copy the output and add to your `~/.m2/settings.xml`:
-
+* Create a new beanstalk application using the AWS web console
+* Environment Type - Predefined Configuration - Tomcat (don't choose Java!)
+* Environment name - your-app-name-dev
+* Configuration Details - Instance type - t2.nano
+* Create
+* go to command line to the beanstalk-template application directory
+* Update details in `update-certificates.sh` (certificate details, endpoint domain name)
+* Run `./update-certificates.sh`
+* Copy `target/keys.tar.gz` somewhere safe
+* Open `keys.tar.gz` and copy the contents of `server-private-key.pem` to the clipboard
+* Run `mvn -ep "<PASTE HERE>"`
+* Copy the output and add to your `~/.m2/settings.xml`:
 ```xml
 <server>
     <server>
@@ -134,32 +133,28 @@ Preparation
     </server>
 </servers>
 ```
-13. Update the pom.xml so is consuming your serverId from above
-14. Update the pom.xml with proxy.host, proxy.port info (leave blank if don't apply)
-14. Test that decrypt works:
-    ```mvn clean install```
-15. 
+* Update the pom.xml so is consuming your serverId from above
+* Update the pom.xml with proxy.host, proxy.port info (leave blank if don't apply)
+* Test that decrypt works:
+```mvn clean install```
+* Set environment variables: 
 ```
 export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
 export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
 ``` 
- 16. Deploy app to beanstalk:
- ```
+* Deploy app to beanstalk:
+```
  mvn package aws:deploy -Dmode=dev
- ```
- 17. Check dashboard on AWS Console - Beanstalk to see deployment happening
- 
- 18. Once healthy, visit http://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if site working
- 
- 19. To test client certificate authenticated https, go to Chrome:
+```
+* Check dashboard on AWS Console - Beanstalk to see deployment happening
+* Once healthy, visit http://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if site working
+* To test client certificate authenticated https, go to Chrome:
  ```
  Settings - Advanced - HTTPS/SSL - Manage certificates - Your certificates - Import
  ```
  Select the `client.p12` file and enter the password from `client-password.txt`
  
- 20. visit https://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if https works (select your certificate when prompted)
- 
- 
+* visit https://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if https works (select your certificate when prompted)
 
 Building and deploying
 -----------------------
