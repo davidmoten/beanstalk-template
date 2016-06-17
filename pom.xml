@@ -8,6 +8,7 @@
 
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
 
         <aws.accessKeyId>${env.AWS_ACCESS_KEY}</aws.accessKeyId>
         <aws.secretKey>${env.AWS_SECRET_ACCESS_KEY}</aws.secretKey>
@@ -17,14 +18,12 @@
         <proxy.host>proxy.amsa.gov.au</proxy.host>
         <proxy.port>8080</proxy.port>
 
-        <beanstalk.applicationName>beanstalkDemo</beanstalk.applicationName>
-        <beanstalk.cnamePrefix>beanstalkDemo</beanstalk.cnamePrefix>
-        <beanstalk.useStagingDirectory>true</beanstalk.useStagingDirectory>
-        <beanstalker.region>ap-southeast-2</beanstalker.region>
-        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <application.name>beanstalk-template</application.name>
+        <application.region>ap-southeast-2</application.region>
+        <application.env>${mode}</application.env>
+        <application.env.name>${application.name}-${application.env}</application.env.name>
         <application.version>${project.artifactId}-${project.version}-${maven.build.timestamp}</application.version>
-        <beanstalk.versionLabel>${application.version}</beanstalk.versionLabel>
-        <beanstalk.environmentRef>beanstalkdemo-env.elasticbeanstalk.com</beanstalk.environmentRef>
+        <application.version.label>${application.version}</application.version.label>
 
         <jetty.plugin.version>8.1.12.v20130726</jetty.plugin.version>
         <jetty.stop.port>9998</jetty.stop.port>
@@ -151,9 +150,9 @@
                     <awsAccessKey>${aws.accessKeyId}</awsAccessKey>
                     <awsSecretAccessKey>${aws.secretKey}</awsSecretAccessKey>
                     <artifact>${project.build.directory}/${project.build.finalName}.war</artifact>
-                    <applicationName>beanstalk-template</applicationName>
-                    <environmentName>beanstalk-template-${mode}</environmentName>
-                    <region>ap-southeast-2</region>
+                    <applicationName>${application.name}</applicationName>
+                    <environmentName>${application.env.name}</environmentName>
+                    <region>${application.region}</region>
                     <httpsProxyHost>${proxy.host}</httpsProxyHost>
                     <httpsProxyPort>${proxy.port}</httpsProxyPort>
                 </configuration>

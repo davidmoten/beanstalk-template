@@ -114,7 +114,7 @@ Preparation
 ------------------
 
 1. Create a new beanstalk application using the AWS web console
-2. Environment Type - Predefined Configuration - Java
+2. Environment Type - Predefined Configuration - Java plus Tomcat
 3. Environment name - your-app-name-dev
 4. Configuration Details - Instance type - t2.nano
 5. Create
