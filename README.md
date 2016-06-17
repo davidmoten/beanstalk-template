@@ -9,7 +9,7 @@ Note that AWS Lambda is a promising alternative to this but may not be as config
 
 These aspects are options for configuring this application:
 
-* Client Certificate Authentication / Basic Authentication over HTTPS
+* Client Certificate Authentication / Pre-emptive Basic Authentication over HTTPS
 * Auto scaling / Single instance
 
 ### Option 1 - Client Certificate Authentication and Auto scaling
@@ -17,32 +17,20 @@ These aspects are options for configuring this application:
 * AWS Elastic Load Balancer is configured to pass through TCP on 443 to 443 on associated Beanstalk instances
 * Security group on Beanstalk application is configured to allow 443 and 80 (for health check which is initiated at the ELB)
 
-### Option 2 - Basic Authentication over HTTPS and Auto scaling
+### Option 2 - Pre-emptive Basic Authentication over HTTPS and Auto scaling
 * AWS Elastic Load Balancer (ELB) is configured with an SSL certificate (self-signed) and routes requests to application in Elastic Beanstalk (EB). 
 * AWS Elastic Load Balancer is configured to pass through TCP on 443 to 443 on associated Beanstalk instances
 * Security group on Beanstalk application is configured to allow 443 and 80 (for health check which is initiated at the ELB)
 
-##Features
-* ELB offers load balancing and auto-scaling 
-* Multi-zone deployment (tick a box in configuration) 
-* Instances automatically rebuilt on major failure
-* OS/Java/Tomcat updates can be applied with rolling update (or backed out) by click of a button (or api call)
-* Logs can be rolled over into S3
+### Option 3 - Client Certificate Authentication and Single instance
+* No ELB is used
+* Security Group on Beanstalk application is configured to allow only 443 (Health check does not use port 80; for single instance deployments it just checks that instance is running via EC2)
 
-##Security
-Security options trialled were
+### Option 4 - Pre-emptive Basic Authentication and Single instance
+* Configure the beanstalk application to use a Load balancer and then configure as Option 2. 
 
-* Pre-emptive Basic Authentication over SSL/TLS
-* Client Certificates
-
-Options not implemented due to concerns over the complexity for constructing the client requests were
-
-* OAuth 1.0, 2.0
-* Amazon Signature 4 
 
 ### Certificate based authentication
-This has been proven to work with a single instance (which does not use the load balancer). Using the load balancer is harder because we need to configure security groups and TCP forwarding of SSL traffic and terminate the SSL traffic at the web server rather than the load balancer. This may be trialled later but there is no pressing requirement.
-
 A YAML script folder `.ebextensions` is placed at the root of the deployed WAR file and is used to customise Apache (also part of Java Tomcat beanstalk image) to handle SSL.  In a contained [YAML script](src/main/webapp/.ebextensions/run.config) Apache is configured to require client certificates for all SSL traffic and a `ca.crt` file is deployed to the filesystem that Apache uses to verify client certificates (which must have been signed by the `ca.crt`, also know as a Root Certificate).
 
 Certificate creation is fully scripted [here](update-certificates.sh).
@@ -54,9 +42,7 @@ cd src/main/webapp/.ebextensions/<MODE>
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mysitename.key -out server.pem -keyout server-private-key.pem -subj '/CN=beanstalk-template-dev.ap-southeast-2.elasticbeanstalk.com/O=Your org/C=AU/ST=Your state/OU=Your org unit/emailAddress=youremail@gmail.com/L=Your location'
 ```
 
-### Preemptive Basic authentication
-This method has been proven to work including with the auto scaling load balancer.
-
+### Preemptive Basic authentication implementation in Java using s3
 If using Preemptive Basic Authentication then each request must have Base64 encoded authentication details in the `Authorization` HTTP header. When a request is recieved the following authentication process occurs:
 
 * The username and password are extracted from the header
@@ -66,7 +52,6 @@ If using Preemptive Basic Authentication then each request must have Base64 enco
 * the resulting hash is compared to the expected hash and if equal the user is authenticated
 
 #### Setting up SSL with a self-signed certificate
-
 Note that the second `openssl` asks for a `Common Name` at which point you enter the domain for the certificate (in this case `beanstalktemplate.ap-southeast-2.elasticbeanstalk.com`).
 
 ```bash
@@ -122,8 +107,10 @@ mvn jetty:run
 ```
 This will communicate with *dev* AWS resources (unless you modify the pom otherwise).
 
-Preparation
-------------------
+Preparation for Client Certificate Authentication and Single instance
+-----------------------------------------------------------------------
+These steps create a single instance beanstalk application that only communicates via https with Client Certificate Authentication
+
 * Create a new beanstalk application using the AWS web console
 * Environment Type - Predefined Configuration - Tomcat (don't choose Java!)
 * Environment name - your-app-name-dev
@@ -177,6 +164,11 @@ export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
   * In EC2 - Security Groups, select the security group named with your application environment name  - Inbound - Edit. Delete the SSH and HTTP rules (leaving only the HTTPS rule). 
   
 Now we have deployed a single instance java application running in a Tomcat container that is only accessible via https and with a specific client certificate.
+
+Preparation for Client Certificate Authentication and Auto scaling
+-----------------------------------------------------------------------
+
+* First complete the single instance steps
 
 Building and deploying
 -----------------------
