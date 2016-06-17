@@ -112,13 +112,19 @@ This will communicate with *dev* AWS resources (unless you modify the pom otherw
 
 Preparation
 ------------------
-
 * Create a new beanstalk application using the AWS web console
 * Environment Type - Predefined Configuration - Tomcat (don't choose Java!)
 * Environment name - your-app-name-dev
 * Configuration Details - Instance type - t2.nano
 * Create
-* go to command line to the beanstalk-template application directory
+* On Github fork this project
+* Clone this project locally
+* In the pom.xml
+  * rename `groupId` to your groupId
+  * rename `artifactId` to *your-application-name*
+  * rename `application.name` under `properties` to *your-application-name*
+  * rename `application.region` to the AWS region you are going to use
+* go to command line to the `beanstalk-template` application directory (rename it if you wish)
 * Update details in `update-certificates.sh` (certificate details, endpoint domain name)
 * Run `./update-certificates.sh`
 * Copy `target/keys.tar.gz` somewhere safe
@@ -138,23 +144,23 @@ Preparation
 * Test that decrypt works:
 ```mvn clean install```
 * Set environment variables: 
-```
+```bash
 export AWS_ACCESS_KEY=<YOUR_ACCESS_KEY>
 export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
 ``` 
 * Deploy app to beanstalk:
-```
+```bash
  mvn package aws:deploy -Dmode=dev
 ```
 * Check dashboard on AWS Console - Beanstalk to see deployment happening
-* Once healthy, visit http://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if site working
+* Once healthy, visit http://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if port 80 site working
 * To test client certificate authenticated https, go to Chrome:
  ```
  Settings - Advanced - HTTPS/SSL - Manage certificates - Your certificates - Import
  ```
  Select the `client.p12` file and enter the password from `client-password.txt`
  
-* visit https://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if https works (select your certificate when prompted)
+* visit https://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if https works (port 443) (select your certificate when prompted)
 
 Building and deploying
 -----------------------
