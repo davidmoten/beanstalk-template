@@ -5,7 +5,7 @@ The web app is available via HTTPS only (self signed certificate) at a custom do
 
 Note that AWS Lambda is a promising alternative to this but may not be as configurable and as of this writing (Jun 2016) was not available in Australia.
 
-##Architecture in detail
+##Architecture
 
 These aspects are options for configuring this application:
 
@@ -169,6 +169,7 @@ Preparation for Client Certificate Authentication and Auto scaling
 -----------------------------------------------------------------------
 
 * First complete the single instance steps
+* Beanstalk - go to your environment - `Configuration - Environment Type` - select `Load balancing, auto scaling` and apply
 
 Building and deploying
 -----------------------
