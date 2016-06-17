@@ -114,7 +114,7 @@ Preparation
 ------------------
 
 1. Create a new beanstalk application using the AWS web console
-2. Environment Type - Predefined Configuration - Java plus Tomcat
+2. Environment Type - Predefined Configuration - Tomcat (don't choose Java!)
 3. Environment name - your-app-name-dev
 4. Configuration Details - Instance type - t2.nano
 5. Create
@@ -147,6 +147,19 @@ export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
  ```
  mvn package aws:deploy -Dmode=dev
  ```
+ 17. Check dashboard on AWS Console - Beanstalk to see deployment happening
+ 
+ 18. Once healthy, visit http://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if site working
+ 
+ 19. To test client certificate authenticated https, go to Chrome:
+ ```
+ Settings - Advanced - HTTPS/SSL - Manage certificates - Your certificates - Import
+ ```
+ Select the `client.p12` file and enter the password from `client-password.txt`
+ 
+ 20. visit https://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if https works (select your certificate when prompted)
+ 
+ 
 
 Building and deploying
 -----------------------
