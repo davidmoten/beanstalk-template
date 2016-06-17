@@ -96,8 +96,8 @@ The `curl` command can be used to test connection using a client certificate:
 Run this command from the base directory of the project (assumes you have the `client-dev.key` file in your home directory).
 
 ```bash
-curl --cacert src/main/webapp/.ebextensions/certificates/dev/server.pem --cert-type pem --cert src/main/client-certificates/dev/client.crt --key ~/client-dev.key --data-urlencode "a=hello" https://beanstalk-template-dev.ap-southeast-2.elasticbeanstalk.com/submit```
-
+curl --cacert src/main/webapp/.ebextensions/certificates/dev/server.pem --cert-type pem --cert src/main/client-certificates/dev/client.crt --key ~/client-dev.key --data-urlencode "a=hello" https://beanstalk-template-dev.ap-southeast-2.elasticbeanstalk.com/submit
+```
 
 Testing
 ----------
@@ -161,6 +161,10 @@ export AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>
  Select the `client.p12` file and enter the password from `client-password.txt`
  
 * visit https://your-app-name-dev.ap-southeast-2.elasticbeanstalk.com to see if https works (port 443) (select your certificate when prompted)
+* Now turn off port 80 as follows:
+  * In EC2 - Security Groups, select the security group named with your application environment name  - Inbound - Edit. Delete the SSH and HTTP rules (leaving only the HTTPS rule). 
+  
+Now we have deployed a single instance java application running in a Tomcat container that is only accessible via https and with a specific client certificate.
 
 Building and deploying
 -----------------------
