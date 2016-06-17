@@ -1,4 +1,7 @@
 # beanstalk-template
+
+**Pre-alpha: This page is work in progress**
+
 Web Service endpoint for deployment to Amazon Web Services (AWS) Beanstalk (somewhere between IAAS and PAAS).
 
 The web app is available via HTTPS only (self signed certificate) at a custom domain (optional) and requires Client Certificate Authentication.  Basic Authentication over HTTPS is also discussed in this README.
@@ -163,6 +166,8 @@ Preparation for Client Certificate Authentication and Auto scaling
 
 * First complete the single instance steps
 * Beanstalk - go to your environment - `Configuration - Environment Type` - select `Load balancing, auto scaling` and apply
+* EC2 - `Load Balancers`. Edit the ELB for your beanstalk env - `Listeners - Edit`. Remove the HTTP 80->80 listener and add a listener for TCP 443 -> 443 (don't use HTTPS because that terminates SSL at the ELB) 
+
 
 Building and deploying
 -----------------------
