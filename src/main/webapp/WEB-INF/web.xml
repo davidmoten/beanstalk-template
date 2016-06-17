@@ -28,8 +28,8 @@
 <!--     </login-config> -->
 
     <welcome-file-list>
-        <welcome-file>docs/index.jsp</welcome-file>
-        <welcome-file>docs/index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
     <session-config>
