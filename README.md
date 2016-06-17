@@ -35,13 +35,6 @@ A YAML script folder `.ebextensions` is placed at the root of the deployed WAR f
 
 Certificate creation is fully scripted [here](update-certificates.sh).
 
-#### Create certificate for Apache
-```bash
-## create certificate for Apache
-cd src/main/webapp/.ebextensions/<MODE>
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mysitename.key -out server.pem -keyout server-private-key.pem -subj '/CN=beanstalk-template-dev.ap-southeast-2.elasticbeanstalk.com/O=Your org/C=AU/ST=Your state/OU=Your org unit/emailAddress=youremail@gmail.com/L=Your location'
-```
-
 ### Preemptive Basic authentication implementation in Java using s3
 If using Preemptive Basic Authentication then each request must have Base64 encoded authentication details in the `Authorization` HTTP header. When a request is recieved the following authentication process occurs:
 
