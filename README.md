@@ -1,14 +1,26 @@
 # beanstalk-template
 Web Service endpoint for deployment to Amazon Web Services (AWS) Beanstalk (somewhere between IAAS and PAAS).
 
-The web app is available via HTTPS only (self signed certificate) at a custom domain and requires Client Certificate Authentication.
+The web app is available via HTTPS only (self signed certificate) at a custom domain (optional) and requires Client Certificate Authentication.  Basic Authentication over HTTPS is also discussed in this README.
 
-Note that this is a good use case for using AWS Lambda but as not available in Australia so will assess later.
+Note that AWS Lambda is a promising alternative to this but may not be as configurable and as of this writing (Jun 2016) was not available in Australia.
 
 ##Architecture in detail
-* AWS Elastic Load Balancer (ELB) is configured with an SSL certificate (self-signed) and routes requests to our application in Elastic Beanstalk (EB). 
-* The application in EB comprises a Java servlet webapp that is deployed by EB to a group of 1 to N autoscaled EC2 instances running Linux and Tomcat 8.
 
+These aspects are options for configuring this application:
+
+* Client Certificate Authentication / Basic Authentication over HTTPS
+* Auto scaling / Single instance
+
+### Option 1 - Client Certificate Authentication and Auto scaling
+* AWS Elastic Load Balancer (ELB) is **not** configured with an SSL certificate because Apache on the instances will terminate SSL
+* AWS Elastic Load Balancer is configured to pass through TCP on 443 to 443 on associated Beanstalk instances
+* Security group on Beanstalk application is configured to allow 443 and 80 (for health check which is initiated at the ELB)
+
+### Option 2 - Basic Authentication over HTTPS and Auto scaling
+* AWS Elastic Load Balancer (ELB) is configured with an SSL certificate (self-signed) and routes requests to application in Elastic Beanstalk (EB). 
+* AWS Elastic Load Balancer is configured to pass through TCP on 443 to 443 on associated Beanstalk instances
+* Security group on Beanstalk application is configured to allow 443 and 80 (for health check which is initiated at the ELB)
 
 ##Features
 * ELB offers load balancing and auto-scaling 
