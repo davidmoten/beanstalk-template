@@ -8,7 +8,7 @@ The web app is available via HTTPS only (self signed certificate) at a custom do
 
 Note that AWS Lambda is a promising alternative to this but may not be as configurable and as of this writing (Jun 2016) was not available in Australia.
 
-##Architecture
+## Architecture
 
 These aspects are options for configuring this application:
 
@@ -80,10 +80,10 @@ If you create the domain name with *AWS Route 53* then all you need to do is go 
 
 Wait 10 mins or so and it will start working.
 
-##Logging
+## Logging
 Log file rotation to S3 can be enabled. See [here](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.logging.html).
 
-##Testing authentication with client certificates
+## Testing authentication with client certificates
 The `curl` command can be used to test connection using a client certificate:
 
 Run this command from the base directory of the project (assumes you have the `client-dev.key` file in your home directory).
